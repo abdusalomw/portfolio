@@ -55,6 +55,14 @@
       gap: 20px;
       list-style: none;
     }
+.camera-video{
+  width:100%;
+  height:500px;
+  border:none;
+  border-radius:25px;
+  object-fit:cover;
+}
+
 
     nav ul li a {
       color: white;
@@ -455,6 +463,57 @@
         justify-content: center;
       }
     }
+    .photo-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  align-items:center;
+}
+
+.camera-3d{
+  height:500px;
+  background:rgba(255,255,255,0.04);
+  border-radius:25px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+}
+
+#cameraCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+}
+
+.photo-grid img{
+  width:100%;
+  height:240px;
+  object-fit:cover;
+  border-radius:20px;
+  transition:0.5s;
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.photo-grid img:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 30px rgba(77,163,255,0.4);
+}
+
+@media(max-width:900px){
+  .photo-layout{
+    grid-template-columns:1fr;
+  }
+
+  .camera-3d{
+    height:350px;
+  }
+}
   </style>
 </head>
 <body>
@@ -479,7 +538,7 @@
 </nav>
 
 <section class="hero">
-<audio id="bgmusic" loop>
+  <audio id="bgmusic" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
@@ -590,6 +649,35 @@
 
   </div>
 </section>
+<section id="photography">
+  <h2 class="section-title">Photography</h2>
+
+  <div class="photo-layout">
+
+    <div class="camera-3d">
+     
+  <iframe
+    class="camera-video"
+    src="https://www.youtube.com/embed/sJUlZaYra2g?autoplay=1&mute=1&loop=1&playlist=sJUlZaYra2g&controls=0&modestbranding=1&rel=0"
+    frameborder="0"
+    allow="autoplay"
+    allowfullscreen>
+  </iframe>
+    </div>
+
+    <div class="photo-grid">
+
+      <img src="photos/p1.JPG" alt="">
+      <img src="photos/p2.JPG" alt="">
+      <img src="photos/p3.JPG" alt="">
+      <img src="photos/p4.jpg" alt="">
+      <img src="photos/p5.jpg" alt="">
+      <img src="photos/p6.jpg" alt="">
+
+    </div>
+
+  </div>
+</section>
 
 <section id="videos">
   <h2 class="section-title">Lifestyle & Vision</h2>
@@ -645,8 +733,10 @@
 <footer>
   © 2026 Abdusalom Eshonqulov Portfolio
 </footer>
-
 <script>
+  document.body.addEventListener('click', () => {
+  document.getElementById('bgmusic').play();
+}, { once: true });
   const text = [
     "Cybersecurity",
     "AI Engineer",
@@ -741,9 +831,67 @@
     canvas.height = window.innerHeight;
     init();
   });
-  document.body.addEventListener('click', () => {
-  document.getElementById('bgmusic').play();
-}, { once: true });
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/loaders/GLTFLoader.js';
+
+const canvas = document.getElementById('cameraCanvas');
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+  45,
+  canvas.clientWidth / canvas.clientHeight,
+  0.1,
+  1000
+);
+
+camera.position.set(0,1.5,4);
+
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  alpha:true,
+  antialias:true
+});
+
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+const light1 = new THREE.DirectionalLight(0xffffff,2);
+light1.position.set(2,2,5);
+scene.add(light1);
+
+const light2 = new THREE.AmbientLight(0xffffff,1);
+scene.add(light2);
+
+const loader = new GLTFLoader();
+
+loader.load('camera.glb', function(gltf){
+
+  const model = gltf.scene;
+
+  model.scale.set(2,2,2);
+
+  scene.add(model);
+
+  function animate(){
+    requestAnimationFrame(animate);
+
+    model.rotation.y += 0.01;
+
+    renderer.render(scene,camera);
+  }
+
+  animate();
+
+});
+
+window.addEventListener('resize', ()=>{
+
+  camera.aspect = canvas.clientWidth / canvas.clientHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+});
 </script>
 
 </body>
