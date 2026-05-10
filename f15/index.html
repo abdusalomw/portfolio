@@ -479,6 +479,9 @@
 </nav>
 
 <section class="hero">
+<audio id="bgmusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
 
   <video autoplay muted loop playsinline class="hero-video">
     <source src="background.mp4" type="video/mp4">
@@ -738,6 +741,9 @@
     canvas.height = window.innerHeight;
     init();
   });
+  document.body.addEventListener('click', () => {
+  document.getElementById('bgmusic').play();
+}, { once: true });
 </script>
 
 </body>
