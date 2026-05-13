@@ -45,3 +45,9 @@ async function loadNews(){
 loadNews();
 
 setInterval(loadNews,5000);
+const news = [
+  {
+    title: "New AI Update",
+    text: "Latest technology news..."
+  }
+];
