@@ -90,4 +90,8 @@ app.listen(3000, ()=>{
   console.log("SERVER ISHLADI 3000");
 
 });
-fetch("https://portfolio-qlgi.onrender.com")
+fetch("https://https://portfolio-qlgi.onrender.com/news")
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+  });
