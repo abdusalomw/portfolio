@@ -51,3 +51,8 @@ const news = [
     text: "Latest technology news..."
   }
 ];
+fetch("https://portfolio-qlgi.onrender.com/news")
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+  });
